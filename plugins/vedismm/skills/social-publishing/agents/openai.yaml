@@ -1,0 +1,4 @@
+interface:
+  display_name: "VediSMM Social Publishing"
+  short_description: "Prepare verified social publication drafts"
+  default_prompt: "Use $social-publishing to check the status of my VediSMM publication without publishing."

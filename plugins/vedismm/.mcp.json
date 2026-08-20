@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "vedismm": {
+      "type": "http",
+      "url": "https://mcp.vedismm.ru/mcp",
+      "oauth_resource": "https://mcp.vedismm.ru/mcp"
+    }
+  }
+}

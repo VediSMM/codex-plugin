@@ -1,0 +1,43 @@
+{
+  "name": "vedismm",
+  "version": "0.1.0",
+  "description": "Prepare, verify, and confirm VediSMM social publications in Codex.",
+  "author": {
+    "name": "VediSMM",
+    "email": "support@vedismm.ru",
+    "url": "https://vedismm.ru"
+  },
+  "homepage": "https://github.com/VediSMM/codex-plugin",
+  "repository": "https://github.com/VediSMM/codex-plugin",
+  "license": "MIT",
+  "keywords": [
+    "vedismm",
+    "social-publishing",
+    "mcp",
+    "oauth"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "VediSMM",
+    "shortDescription": "Prepare verified social publications.",
+    "longDescription": "Use VediSMM to prepare social drafts, inspect immutable preflight results, and publish or schedule only after immediate confirmation.",
+    "developerName": "VediSMM",
+    "category": "Productivity",
+    "capabilities": [
+      "OAuth",
+      "MCP",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://vedismm.ru",
+    "privacyPolicyURL": "https://vedismm.ru/privacy",
+    "termsOfServiceURL": "https://vedismm.ru/terms",
+    "defaultPrompt": [
+      "Show my VediSMM projects and their versions. Do not publish.",
+      "Prepare a VediSMM news draft without publishing it.",
+      "Prepare a scheduled KursHub draft and show its preflight."
+    ]
+  },
+  "mcpServers": "./.mcp.json",
+  "apps": "./.app.json"
+}

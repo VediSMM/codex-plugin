@@ -14,6 +14,7 @@ if [[ ! -d "$package_root" ]]; then
 fi
 
 python3 - "$package_root" <<'PY'
+import json
 import re
 import sys
 from pathlib import Path
@@ -23,20 +24,7 @@ root = Path(sys.argv[1]).resolve()
 skill_path = root / "plugins/vedismm/skills/social-publishing/SKILL.md"
 confirmation_reference_path = root / "plugins/vedismm/skills/social-publishing/references/publication-confirmation.md"
 readme_path = root / "README.md"
-expected_tools = {
-    "list_projects",
-    "get_project_profile",
-    "save_project_profile",
-    "upload_project_asset",
-    "list_destinations",
-    "get_publication_constraints",
-    "create_publication_draft",
-    "preflight_publication",
-    "publish_publication",
-    "schedule_publication",
-    "delete_publication_everywhere",
-    "get_publication_status",
-}
+compatibility_path = root / "compatibility.json"
 
 
 def fail(message: str) -> None:
@@ -56,6 +44,16 @@ try:
     readme = readme_path.read_text(encoding="utf-8")
 except FileNotFoundError:
     fail("missing README.md")
+try:
+    compatibility = json.loads(compatibility_path.read_text(encoding="utf-8"))
+except FileNotFoundError:
+    fail("missing compatibility.json")
+except json.JSONDecodeError as error:
+    fail(f"invalid compatibility.json: {error}")
+
+expected_tools = compatibility.get("required_tools")
+if not isinstance(expected_tools, list) or not all(isinstance(tool, str) for tool in expected_tools):
+    fail("compatibility.json must define required_tools as a list of names")
 
 install_block = re.search(r"(?ms)^## Install\n(.*?)(?=^## |\Z)", readme)
 if install_block is None:
@@ -110,8 +108,17 @@ for line in tool_contract.splitlines():
     if match is not None:
         tool_rows.append(match.group(1))
 
-if set(tool_rows) != expected_tools or len(tool_rows) != len(expected_tools):
-    fail(f"tool contract must contain exactly the 12 domain tools, got {tool_rows!r}")
+if set(tool_rows) != set(expected_tools) or len(tool_rows) != len(expected_tools):
+    fail(f"tool contract must contain every required tool exactly once, got {tool_rows!r}")
+
+for client_specific_assumption in (
+    "codex must",
+    "chatgpt must",
+    "codex plugin",
+    "chatgpt plugin",
+):
+    if client_specific_assumption in workflow.casefold():
+        fail(f"workflow must be client-neutral, not assume: {client_specific_assumption}")
 
 def ordered_after(start: int, text: str, label: str) -> int:
     index = workflow.casefold().find(text.casefold(), start)
@@ -192,8 +199,35 @@ PY
 
 COMPAT="$package_root/compatibility.json"
 SKILL="$package_root/plugins/vedismm/skills/social-publishing/SKILL.md"
+RENDERER="$package_root/scripts/render_standalone_skill.sh"
+DIST="$package_root/dist/social-publishing.md"
 diff -u \
   <(jq -r '.required_tools[]' "$COMPAT" | sort) \
   <(sed -n 's/^| `\([^`]*\)` |.*$/\1/p' "$SKILL" | sort)
+
+if [[ ! -f "$DIST" ]]; then
+  printf 'FAIL: missing standalone distribution: %s\n' "$DIST" >&2
+  exit 1
+fi
+
+if [[ ! -f "$RENDERER" ]]; then
+  printf 'FAIL: missing standalone renderer: %s\n' "$RENDERER" >&2
+  exit 1
+fi
+
+before_sha="$(shasum -a 256 "$DIST" | awk '{print $1}')"
+bash "$RENDERER" "$package_root"
+first_sha="$(shasum -a 256 "$DIST" | awk '{print $1}')"
+if [[ "$before_sha" != "$first_sha" ]]; then
+  printf '%s\n' 'FAIL: standalone distribution changed when regenerated' >&2
+  exit 1
+fi
+
+bash "$RENDERER" "$package_root"
+second_sha="$(shasum -a 256 "$DIST" | awk '{print $1}')"
+if [[ "$first_sha" != "$second_sha" ]]; then
+  printf '%s\n' 'FAIL: standalone distribution is not deterministic across renders' >&2
+  exit 1
+fi
 
 printf '%s\n' 'skill_contract_test.sh: PASS'

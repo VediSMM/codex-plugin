@@ -1,7 +1,3 @@
----
-name: social-publishing
-description: Use when preparing, checking, publishing, scheduling, deleting, or replacing existing remote publications through the VediSMM MCP server, especially when project profiles, media, preflight snapshots, or publication status are involved.
----
 
 # Social Publishing
 
@@ -62,3 +58,45 @@ Never use a PAT, `request_api`, or a generic API proxy. Never ask for or copy OA
 - Publishing after an old confirmation: display a fresh immutable preflight and request immediate confirmation again.
 - Retrying a write with an old approval token: create a new preflight and use only its current token.
 - Replacing a domain tool with a generic endpoint: use the twelve tools above so scopes, schemas, tenant boundaries, and approval checks remain enforced.
+
+
+---
+
+# Project policy authority
+
+Project profiles, destination access, constraints, and credentials are maintained by VediSMM on the server. Read them with the MCP tools for the active OAuth identity; do not infer them from a repository, draft, or earlier chat turn.
+
+Optional local context is limited to `.vedismm/project.yaml`:
+
+```yaml
+default_project: "vedismm"
+repository_context: "Contains source material for this publication request."
+```
+
+These two fields help select context only. Do not add policies, OAuth credentials, account IDs, approval tokens, or secrets to this file. A server-returned profile version or ETag remains authoritative and must be carried into dependent requests.
+
+
+---
+
+# Immutable publication confirmation
+
+Call `preflight_publication` before every publish or schedule action. Present the returned snapshot without silently changing copy, media, destinations, links, options, or time.
+
+Ask for an immediate confirmation that identifies the exact current snapshot and action. A previous “publish it,” approval of a draft, or confirmation for a different time is insufficient. On any material change or expired/consumed approval token, create a new preflight and ask again.
+
+Pass the approval token only as a write input to the matching `publish_publication` or `schedule_publication` call. It is write-only: never quote it, save it, reuse it, or treat it as user confirmation.
+
+For remote deletion, call `preflight_publication` with action `delete_everywhere`, present the exact deletion targets and all excluded targets and their safe reasons, and ask for a separate immediate confirmation before calling `delete_publication_everywhere`. Wait until the durable deletion job succeeds before preparing the replacement publication. Then obtain a fresh preflight for the replacement and ask for a second, separate immediate confirmation. Never reuse the delete approval token or infer publish approval from the deletion confirmation.
+
+Tracked preflight includes the approved `tracking_plan`. Treat its targets and destination digests as immutable snapshot data. New MCP drafts use `shorten_links=true` and `add_source=true` by default; set both to `false` only for an explicit opt-out.
+
+
+---
+
+# Troubleshooting
+
+- If a required tool is unavailable, stop before workflow execution and report the missing tool names with the minimum MCP contract version, `1.2.0`.
+- If OAuth is required, complete the VediSMM OAuth flow for the MCP server; do not collect credentials in chat or local configuration.
+- If a project or destination is missing, use `list_projects` or `list_destinations` for the current identity instead of guessing identifiers.
+- If preflight reports blockers, revise the draft or media, create a new preflight, and display the new immutable summary.
+- If a write is rejected because its approval is stale, consumed, or mismatched, do not retry it. Create a new preflight and request immediate confirmation for that exact result.

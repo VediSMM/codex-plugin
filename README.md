@@ -4,6 +4,8 @@ VediSMM is a universal agent package: a native Codex/ChatGPT plugin plus a porta
 
 Client compatibility is documentation-based; live OAuth acceptance is still pending for each external client surface.
 
+Local integration readiness was verified on 2026-08-25 against the VediSMM server with an executable parity gate pinned to the reviewed Task 5 package revision, `498be3c5cfcab43c2d10f52e3f1ee2ff7288bbed`. The parity gate covers the exact twelve-tool catalog, MCP protocol pair, and API contract version; accompanying local regressions cover security/OWASP and native MySQL races. This is not evidence of remote CI, merged or deployed release state, live third-party OAuth acceptance, or catalog availability.
+
 ## Install
 
 ### Codex CLI

@@ -19,7 +19,7 @@ Use the VediSMM MCP server over Streamable HTTP with OAuth. The server is author
 6. Request immediate confirmation for that exact snapshot. Do not infer confirmation from an earlier request, a general instruction, or approval of a different draft.
 7. Only after that confirmation, call `publish_publication` or `schedule_publication` with the current write-only approval token. Never display, persist, reuse, or substitute the token; it is input to the one matching write only.
 8. Read durable progress or delivery results with `get_publication_status`.
-9. To replace an already published post, first call `preflight_publication` with action `delete_everywhere`, display its exact deletion targets, and request a separate immediate confirmation. Only then call `delete_publication_everywhere` and wait for successful durable deletion status. Create or update the replacement draft afterward, run a fresh publish preflight, and request another separate immediate confirmation before publishing. A delete confirmation never authorizes the replacement publication.
+9. To replace an already published post, first call `preflight_publication` with action `delete_everywhere`, display its exact deletion targets plus any excluded targets and their safe reasons, and request a separate immediate confirmation. Only then call `delete_publication_everywhere` and wait for successful durable deletion status. Create or update the replacement draft afterward, run a fresh publish preflight, and request another separate immediate confirmation before publishing. A delete confirmation never authorizes the replacement publication.
 
 ## Tool contract
 

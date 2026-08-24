@@ -22,6 +22,7 @@ from pathlib import Path
 root = Path(sys.argv[1]).resolve()
 skill_path = root / "plugins/vedismm/skills/social-publishing/SKILL.md"
 confirmation_reference_path = root / "plugins/vedismm/skills/social-publishing/references/publication-confirmation.md"
+readme_path = root / "README.md"
 expected_tools = {
     "list_projects",
     "get_project_profile",
@@ -51,6 +52,27 @@ try:
     confirmation_reference = confirmation_reference_path.read_text(encoding="utf-8")
 except FileNotFoundError:
     fail("missing publication confirmation reference")
+try:
+    readme = readme_path.read_text(encoding="utf-8")
+except FileNotFoundError:
+    fail("missing README.md")
+
+install_block = re.search(r"(?ms)^## Install\n(.*?)(?=^## |\Z)", readme)
+if install_block is None:
+    fail("README must contain a self-contained Install section")
+install = install_block.group(1)
+for command in (
+    "codex plugin marketplace add VediSMM/codex-plugin",
+    "codex plugin add vedismm@vedismm",
+):
+    if install.count(command) != 1:
+        fail(f"README Install must contain the exact supported command once: {command}")
+for phrase, label in (
+    ("start a new task", "new-task activation boundary"),
+    ("oauth", "first-use OAuth connection"),
+):
+    if phrase not in install.casefold():
+        fail(f"README Install must explain {label}")
 
 frontmatter = re.match(r"(?s)\A---\n(.*?)\n---\n", skill)
 if frontmatter is None:
@@ -109,6 +131,7 @@ for phrase, label in (
     ("default", "default-on tracking behavior"),
     ("explicit opt-out", "explicit tracking opt-out"),
     ("delete_publication_everywhere", "delete-everywhere tool"),
+    ("excluded targets", "safe excluded deletion targets"),
     ("separate", "separate delete and replacement confirmations"),
 ):
     if phrase not in workflow.casefold():
@@ -145,6 +168,7 @@ for phrase, label in (
     ("immediate confirmation that identifies the exact current snapshot and action", "exact current snapshot and action"),
     ("confirmation for a different time is insufficient", "exact schedule time"),
     ("delete_everywhere", "delete preflight action"),
+    ("excluded targets and their safe reasons", "safe excluded deletion target summary"),
     ("separate immediate confirmation", "separate delete confirmation"),
     ("fresh preflight", "fresh replacement preflight"),
 ):

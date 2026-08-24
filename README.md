@@ -4,7 +4,11 @@ VediSMM is a universal agent package: a native Codex/ChatGPT plugin plus a porta
 
 Client compatibility is documentation-based; live OAuth acceptance is still pending for each external client surface.
 
-Local integration readiness was verified on 2026-08-25 against the VediSMM server with an executable parity gate pinned to the reviewed Task 5 package revision, `498be3c5cfcab43c2d10f52e3f1ee2ff7288bbed`. The parity gate covers the exact twelve-tool catalog, MCP protocol pair, and API contract version; accompanying local regressions cover security/OWASP and native MySQL races. This is not evidence of remote CI, merged or deployed release state, live third-party OAuth acceptance, or catalog availability.
+Local integration readiness was verified on 2026-08-25 against the VediSMM server. The bidirectional parity gate covers the exact twelve-tool catalog, MCP protocol pair, and authoritative MCP contract version; accompanying local regressions cover REST/OpenAPI independently, security/OWASP, and native MySQL races. This is not evidence of remote CI, merged or deployed release state, live third-party OAuth acceptance, or catalog availability.
+
+## Cross-repository compatibility
+
+Package CI checks out the exact server contract anchor `2a58555869d2667ce77bb1e245a24d1b24698fd7` and runs both positive parity and a checked-in negative package-drift fixture. Server CI pins the package release head containing this workflow. The two pins are deliberately asymmetric: the package points to the contract-bearing server anchor created first, while the later server integration commit points to the complete package head. This makes both revisions immutable and reproducible without an impossible circular commit-hash dependency.
 
 ## Install
 

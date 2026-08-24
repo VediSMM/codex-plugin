@@ -1,0 +1,47 @@
+name: Package contract
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: package-contract-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  package-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out universal agent package
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
+      - name: Check out pinned VediSMM server contract anchor
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          repository: VediSMM/website
+          ref: 2a58555869d2667ce77bb1e245a24d1b24698fd7
+          path: server
+          persist-credentials: false
+      - name: Install pinned PHP runtime
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240
+        with:
+          php-version: '8.3'
+          extensions: mbstring
+          coverage: none
+      - name: Package manifest
+        run: bash tests/manifest_test.sh
+      - name: Canonical skill contract
+        run: bash tests/skill_contract_test.sh
+      - name: Client guides
+        run: bash tests/client_guides_test.sh
+      - name: Bidirectional server compatibility
+        env:
+          VEDISMM_SERVER_DIR: ${{ github.workspace }}/server
+        run: bash tests/server_compatibility_test.sh

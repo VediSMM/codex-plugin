@@ -1,6 +1,6 @@
 {
   "name": "vedismm",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Prepare, verify, and confirm VediSMM social publications in Codex.",
   "author": {
     "name": "VediSMM",
@@ -20,7 +20,7 @@
   "interface": {
     "displayName": "VediSMM",
     "shortDescription": "Prepare verified social publications.",
-    "longDescription": "Use VediSMM to prepare social drafts, inspect immutable preflight results, and publish or schedule only after immediate confirmation.",
+    "longDescription": "Use VediSMM to prepare tracked social drafts, inspect immutable preflight results, and publish, schedule, or delete remote publications only after immediate confirmation.",
     "developerName": "VediSMM",
     "category": "Productivity",
     "capabilities": [

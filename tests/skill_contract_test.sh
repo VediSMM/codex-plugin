@@ -33,6 +33,7 @@ expected_tools = {
     "preflight_publication",
     "publish_publication",
     "schedule_publication",
+    "delete_publication_everywhere",
     "get_publication_status",
 }
 
@@ -73,7 +74,7 @@ for line in tool_contract.splitlines():
         tool_rows.append(match.group(1))
 
 if set(tool_rows) != expected_tools or len(tool_rows) != len(expected_tools):
-    fail(f"tool contract must contain exactly the 11 domain tools, got {tool_rows!r}")
+    fail(f"tool contract must contain exactly the 12 domain tools, got {tool_rows!r}")
 
 def ordered_after(start: int, text: str, label: str) -> int:
     index = workflow.casefold().find(text.casefold(), start)
@@ -87,6 +88,16 @@ preflight_index = ordered_after(draft_index + 1, "preflight_publication", "prefl
 confirmation_index = ordered_after(preflight_index + 1, "immediate confirmation", "immediate confirmation after preflight")
 ordered_after(confirmation_index + 1, "publish_publication", "publish after confirmation")
 ordered_after(confirmation_index + 1, "schedule_publication", "schedule after confirmation")
+
+for phrase, label in (
+    ("tracking_plan", "approved tracking plan"),
+    ("default", "default-on tracking behavior"),
+    ("explicit opt-out", "explicit tracking opt-out"),
+    ("delete_publication_everywhere", "delete-everywhere tool"),
+    ("separate", "separate delete and replacement confirmations"),
+):
+    if phrase not in workflow.casefold():
+        fail(f"workflow must include {label}")
 
 workflow_lower = workflow.casefold()
 for phrase, label in (
@@ -118,6 +129,9 @@ confirmation_reference_lower = confirmation_reference.casefold()
 for phrase, label in (
     ("immediate confirmation that identifies the exact current snapshot and action", "exact current snapshot and action"),
     ("confirmation for a different time is insufficient", "exact schedule time"),
+    ("delete_everywhere", "delete preflight action"),
+    ("separate immediate confirmation", "separate delete confirmation"),
+    ("fresh preflight", "fresh replacement preflight"),
 ):
     if phrase not in confirmation_reference_lower:
         fail(f"publication confirmation reference must preserve {label}")

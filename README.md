@@ -13,6 +13,13 @@ codex plugin add vedismm@vedismm
 
 Start a new task so Codex loads the plugin. On first use, choose VediSMM and complete the OAuth connection in the browser; do not paste an API key into the chat or repository.
 
+## Client guides
+
+- [Codex and ChatGPT](clients/codex-chatgpt.md)
+- [Claude Code](clients/claude.md)
+- [Cursor](clients/cursor.md)
+- [Other MCP clients](clients/generic-mcp.md)
+
 ## What it does
 
 The `social-publishing` skill resolves a project, reads its current server profile and constraints, prepares variants and media, creates a tracked-by-default draft, runs preflight, displays the immutable summary, requests immediate confirmation, then publishes or schedules. It can also delete an existing remote publication after its own exact confirmation and read durable job status. A draft or an old confirmation never authorizes a changed snapshot.

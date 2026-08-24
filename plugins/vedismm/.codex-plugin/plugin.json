@@ -1,7 +1,7 @@
 {
   "name": "vedismm",
-  "version": "0.1.1",
-  "description": "Prepare, verify, and confirm VediSMM social publications in Codex.",
+  "version": "0.2.0",
+  "description": "Prepare, verify, and confirm VediSMM social publications in compatible agent clients.",
   "author": {
     "name": "VediSMM",
     "email": "support@vedismm.ru",

@@ -1,0 +1,19 @@
+{
+  "package_version": "0.2.0",
+  "min_mcp_contract": "1.2.0",
+  "protocol_versions": ["2025-06-18", "2026-07-28"],
+  "required_tools": [
+    "list_projects",
+    "get_project_profile",
+    "save_project_profile",
+    "upload_project_asset",
+    "list_destinations",
+    "get_publication_constraints",
+    "create_publication_draft",
+    "preflight_publication",
+    "publish_publication",
+    "schedule_publication",
+    "delete_publication_everywhere",
+    "get_publication_status"
+  ]
+}

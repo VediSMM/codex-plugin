@@ -168,7 +168,6 @@ assert_equal(plugin.get("source"), {"source": "local", "path": "./plugins/vedism
 assert_equal(plugin.get("policy"), {"installation": "AVAILABLE", "authentication": "ON_INSTALL"}, "marketplace policy")
 assert_equal(plugin.get("category"), "Productivity", "marketplace category")
 
-print("manifest_test.sh: PASS")
 PY
 
 COMPAT="$package_root/compatibility.json"
@@ -176,3 +175,5 @@ jq -e '.package_version == "0.2.0"' "$COMPAT" >/dev/null
 jq -e '.min_mcp_contract == "1.2.0"' "$COMPAT" >/dev/null
 jq -e '.protocol_versions == ["2025-06-18", "2026-07-28"]' "$COMPAT" >/dev/null
 jq -e '.required_tools | length == 12 and (unique | length == 12)' "$COMPAT" >/dev/null
+
+printf '%s\n' 'manifest_test.sh: PASS'

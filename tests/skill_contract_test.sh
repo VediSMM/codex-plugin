@@ -188,7 +188,6 @@ if skill_lower.count("generic api proxy") != 1:
 if skill_lower.count("pat") != 1:
     fail("PAT may appear only in the explicit prohibition")
 
-print("skill_contract_test.sh: PASS")
 PY
 
 COMPAT="$package_root/compatibility.json"
@@ -196,3 +195,5 @@ SKILL="$package_root/plugins/vedismm/skills/social-publishing/SKILL.md"
 diff -u \
   <(jq -r '.required_tools[]' "$COMPAT" | sort) \
   <(sed -n 's/^| `\([^`]*\)` |.*$/\1/p' "$SKILL" | sort)
+
+printf '%s\n' 'skill_contract_test.sh: PASS'

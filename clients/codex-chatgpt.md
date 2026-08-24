@@ -20,7 +20,10 @@ Start a new task after installation. In ChatGPT or the ChatGPT desktop app, open
 
 The plugin supplies the Streamable HTTP endpoint `https://mcp.vedismm.ru/mcp`. When VediSMM requests authentication, choose it and complete the browser OAuth authorization-code flow. OpenAI's MCP OAuth flow uses PKCE; no OAuth secret belongs in local configuration.
 
-The plugin loads the [canonical `social-publishing` skill](../plugins/vedismm/skills/social-publishing/SKILL.md) in the new task. Invoke `$social-publishing` explicitly if automatic selection does not occur.
+The plugin loads the [canonical `social-publishing` skill](../plugins/vedismm/skills/social-publishing/SKILL.md) in the new task or chat.
+
+- **Codex CLI:** invoke `$social-publishing` if automatic selection does not occur.
+- **ChatGPT:** type `@`, select **VediSMM**, then select the bundled `social-publishing` skill.
 
 ## Smoke test
 

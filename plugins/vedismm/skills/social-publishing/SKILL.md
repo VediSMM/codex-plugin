@@ -1,6 +1,6 @@
 ---
 name: social-publishing
-description: Use when preparing, checking, publishing, or scheduling VediSMM social content through the VediSMM MCP server, especially when project profiles, media, preflight snapshots, or publication status are involved.
+description: Use when preparing, checking, publishing, scheduling, deleting, or replacing existing remote publications through the VediSMM MCP server, especially when project profiles, media, preflight snapshots, or publication status are involved.
 ---
 
 # Social Publishing

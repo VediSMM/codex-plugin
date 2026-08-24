@@ -52,6 +52,21 @@ try:
 except FileNotFoundError:
     fail("missing publication confirmation reference")
 
+frontmatter = re.match(r"(?s)\A---\n(.*?)\n---\n", skill)
+if frontmatter is None:
+    fail("skill must contain YAML frontmatter")
+description_match = re.search(r"(?m)^description:\s*(.+)$", frontmatter.group(1))
+if description_match is None:
+    fail("skill frontmatter must contain a description")
+description = description_match.group(1).casefold()
+for phrase, label in (
+    ("deleting", "direct remote deletion discoverability"),
+    ("replacing", "direct remote replacement discoverability"),
+    ("remote publications", "remote publication intent"),
+):
+    if phrase not in description:
+        fail(f"skill description must include {label}")
+
 
 def section(heading: str) -> str:
     match = re.search(rf"(?ms)^## {re.escape(heading)}\n(.*?)(?=^## |\Z)", skill)

@@ -4,11 +4,13 @@ VediSMM is a universal agent package: a native Codex/ChatGPT plugin plus a porta
 
 Client compatibility is documentation-based; live OAuth acceptance is still pending for each external client surface.
 
-Local integration readiness was verified on 2026-08-25 against the VediSMM server. The bidirectional parity gate covers the exact twelve-tool catalog, MCP protocol pair, and authoritative MCP contract version; accompanying local regressions cover REST/OpenAPI independently, security/OWASP, and native MySQL races. This is not evidence of remote CI, merged or deployed release state, live third-party OAuth acceptance, or catalog availability.
+Local integration readiness was verified on 2026-08-25 against the VediSMM server. The bidirectional parity gate covers the exact twelve-tool catalog, MCP protocol pair, and authoritative MCP contract version; accompanying local regressions cover REST/OpenAPI independently, security/OWASP, and native MySQL races. This is not evidence of merged or deployed release state, live third-party OAuth acceptance, or catalog availability.
 
 ## Cross-repository compatibility
 
-Package CI checks out the exact server contract anchor `2a58555869d2667ce77bb1e245a24d1b24698fd7` and runs both positive parity and a checked-in negative package-drift fixture. Server CI pins the package release head containing this workflow. The two pins are deliberately asymmetric: the package points to the contract-bearing server anchor created first, while the later server integration commit points to the complete package head. This makes both revisions immutable and reproducible without an impossible circular commit-hash dependency.
+The public package contains a minimal [MCP contract snapshot](contracts/server-mcp-contract.json) exported from private server commit `2a58555869d2667ce77bb1e245a24d1b24698fd7`. It contains only the source anchor, authoritative MCP contract version, supported protocol versions, and public tool names. Package CI compares `compatibility.json` with that local snapshot and proves that a checked-in tool-drift mutation fails. It checks out no private repository and requires no Actions secret, so the same gate runs for public pull requests.
+
+The private server CI remains authoritative: it checks the real `McpKernel` and production `ToolRegistry` against an exact package commit. Contract updates therefore follow this order: commit and review the private server source anchor; export only those public values into the package snapshot; run and publish the package checks; then update the private server workflow to the resulting exact package SHA. Package CI proves internal parity with the reviewed export, but cannot independently authenticate or regenerate private source; review of the source anchor plus the private server gate provides that trust boundary.
 
 ## Install
 

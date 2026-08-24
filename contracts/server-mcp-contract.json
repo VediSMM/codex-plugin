@@ -1,0 +1,20 @@
+{
+  "source_repository": "VediSMM/website",
+  "source_commit": "2a58555869d2667ce77bb1e245a24d1b24698fd7",
+  "mcp_contract_version": "1.2.0",
+  "protocol_versions": ["2025-06-18", "2026-07-28"],
+  "required_tools": [
+    "list_projects",
+    "get_project_profile",
+    "save_project_profile",
+    "upload_project_asset",
+    "list_destinations",
+    "get_publication_constraints",
+    "create_publication_draft",
+    "preflight_publication",
+    "publish_publication",
+    "schedule_publication",
+    "delete_publication_everywhere",
+    "get_publication_status"
+  ]
+}

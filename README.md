@@ -2,9 +2,20 @@
 
 VediSMM prepares social publication drafts through the VediSMM MCP server. It uses OAuth over Streamable HTTP at `https://mcp.vedismm.ru/mcp`; social credentials, project profiles, policies, and approval records remain server-side.
 
+## Install
+
+Install the public Git marketplace and the plugin on each device:
+
+```bash
+codex plugin marketplace add VediSMM/codex-plugin
+codex plugin add vedismm@vedismm
+```
+
+Start a new task so Codex loads the plugin. On first use, choose VediSMM and complete the OAuth connection in the browser; do not paste an API key into the chat or repository.
+
 ## What it does
 
-The `social-publishing` skill resolves a project, reads its current server profile and constraints, prepares variants and media, creates a draft, runs preflight, displays the immutable summary, requests immediate confirmation, then publishes or schedules. It can also read durable publication status. A draft or an old confirmation never authorizes a changed snapshot.
+The `social-publishing` skill resolves a project, reads its current server profile and constraints, prepares variants and media, creates a tracked-by-default draft, runs preflight, displays the immutable summary, requests immediate confirmation, then publishes or schedules. It can also delete an existing remote publication after its own exact confirmation and read durable job status. A draft or an old confirmation never authorizes a changed snapshot.
 
 ## Starter scenarios
 
@@ -21,7 +32,7 @@ The plugin UI shows the first three prompts because the manifest permits at most
 
 ## Safety
 
-Before `publish_publication` or `schedule_publication`, the skill obtains and displays an immutable preflight snapshot. It asks for an immediate confirmation of that exact snapshot and uses the corresponding approval token only as a one-time write input. It never uses a personal access token, `request_api`, or a generic API proxy.
+Before `publish_publication`, `schedule_publication`, or `delete_publication_everywhere`, the skill obtains and displays an immutable preflight snapshot. A delete preflight includes both deletable targets and any excluded targets with safe reasons. The skill asks for an immediate confirmation of that exact snapshot and uses the corresponding approval token only as a one-time write input. Delete and replacement publish use separate confirmations and fresh preflights. It never uses a personal access token, `request_api`, or a generic API proxy.
 
 ## Links
 

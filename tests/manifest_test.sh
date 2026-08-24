@@ -88,7 +88,7 @@ assert_equal(manifest.get("name"), "vedismm", "plugin name")
 version = manifest.get("version")
 if not isinstance(version, str) or re.fullmatch(r"(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?", version) is None:
     fail("plugin version must be semantic versioning")
-assert_equal(version, "0.1.0", "plugin version")
+assert_equal(version, "0.1.1", "plugin version")
 assert_equal(manifest.get("homepage"), "https://github.com/VediSMM/codex-plugin", "homepage")
 assert_equal(manifest.get("repository"), "https://github.com/VediSMM/codex-plugin", "repository")
 assert_equal(manifest.get("license"), "MIT", "license")
